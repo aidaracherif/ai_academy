@@ -24,13 +24,11 @@
 <textarea id="message" name="message" rows="5"></textarea>
 </div>
 <button type="submit" class="btn">Envoyer</button>
-<% if (success) { %>
+<% if (successMessage) { %>
     <div class="notification success"><%= success %></div>
   <% } %>
-  <% if (error) { %>
+  <% if (errorMessage) { %>
     <div class="notification error"><%= error %></div>
   <% } %>
 </form>
 
-
-  

@@ -8,7 +8,7 @@ const courses = [
     {
     title: "Machine Learning Fondamental",
     description: "Apprenez les principes du machine learning et les algorithmes de base.",
-    price: 299,
+    price: 299, 
     level: "Intermédiaire"
     },
     {
@@ -18,57 +18,81 @@ const courses = [
     level: "Avancé"
     }
     ];
-    exports.index = (req, res) => {
+
+exports.index = (req, res) => {
     res.render("index", { pageTitle: "Accueil" });
     };
 
-    exports.faq = (req, res) => {
+exports.faq = (req, res) => {
     res.render("faq", { pageTitle: "FAQ" });
     };
 
-    exports.about = (req, res) => {
+exports.about = (req, res) => {
     res.render("about", { pageTitle: "À propos" });
     };
+
+// exports.contact = (req, res) => {
+//       res.render("contact", { pageTitle: "Contact" });
+//       };
+
+exports.contact = (req, res) => {
+  const successMessage = req.session.success || null;
+  const errorMessage = req.session.error || null;
+
+  // Efface les messages après les avoir affichés
+  req.session.success = null;
+  req.session.error = null;
+
+  res.render("contact", {
+      pageTitle: "Contact",
+      successMessage,
+      errorMessage
+  });
+};
+
+exports.processContact = (req, res) => {
+  const { name, email, course, message } = req.body;
+
+  if (!name || !email || !course || !message) {
+      req.session.error = "Veuillez remplir tous les champs obligatoires.";
+      return res.redirect("/contact");
+  }
+
+  // Ici tu pourrais traiter ou stocker les données...
+
+  req.session.success = "Votre message a bien été envoyé ! Merci de nous avoir contactés.";
+  res.redirect("/contact");
+};
+
     
-    exports.courses = (req, res) => {
+exports.courses = (req, res) => {
         const level = req.query.level;
         const price = req.query.price;
       
-        let filteredCourses = allCourses; // suppose que tu as une liste de cours
+        let filteredCourses = courses; // suppose que tu as une liste de cours
       
         if (level) {
           filteredCourses = filteredCourses.filter(c => c.level === level);
         }
       
         if (price) {
-          filteredCourses = filteredCourses.filter(c => c.price === price);
+          filteredCourses = filteredCourses.filter(c => c.price === parseInt(price));
         }
+        
       
-        res.render("courses", { courses: filteredCourses });
+        res.render("courses", { 
+          pageTitle: "Nos cours",
+          courses: filteredCourses 
+        });
       };
 
       
-    exports.contact = (req, res) => {
-    res.render("contact", { pageTitle: "Contact" });
-    };
 
-    exports.subscriber = (req, res) => {
-      res.render("subscriber");
+exports.subscriber = (req, res) => {
+      res.render("subscriber", { pageTitle: "Abonnes" });
     };
     
-    exports.processContact = (req, res) => {
-        const { name, email, course, message } = req.body;
-      
-        if (!name || !email) {
-          req.session.error = "Veuillez remplir les champs obligatoires.";
-          return res.redirect("/contact");
-        }
-      
-        // Ici tu pourrais traiter ou stocker les données...
-      
-        req.session.success = "Votre message a bien été envoyé ! Merci de nous avoir contactés.";
-        res.redirect("/contact");
-      };
+
       
     
       
