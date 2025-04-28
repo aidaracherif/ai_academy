@@ -25,12 +25,15 @@ module.exports = {
 
   indexView: (req, res) => {
     res.render("courses/index", {
+      pageTitle: "Liste des Cours", // <-- Ajout de pageTitle
       courses: res.locals.courses
     });
+    
   },
 
   new: (req, res) => {
     res.render("courses/new", {
+      pageTitle: "Nouveau Cours", // <-- Ajout de pageTitle
       course: new Course()
     });
   },
@@ -72,6 +75,7 @@ module.exports = {
 
   showView: (req, res) => {
     res.render("courses/show", {
+      pageTitle: "Détails du Cours", // <-- Ajout de pageTitle
       course: res.locals.course
     });
   },
@@ -81,6 +85,7 @@ module.exports = {
     Course.findById(courseId)
       .then(course => {
         res.render("courses/edit", {
+          pageTitle: "Modifier le Cours", // <-- Ajout de pageTitle
           course: course
         });
       })
