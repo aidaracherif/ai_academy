@@ -6,6 +6,7 @@ const jsonWebToken = require("jsonwebtoken");
 const passport = require("passport");
 
 // Clé secrète pour signer les tokens JWT
+
 const token_key = process.env.TOKEN_KEY || "secretTokenKey";
 module.exports = {
 // Middleware pour vérifier les tokens JWT

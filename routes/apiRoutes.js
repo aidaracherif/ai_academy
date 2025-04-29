@@ -2,30 +2,46 @@ const express = require("express");
 const router = express.Router();
 const apiController = require("../controllers/apiController");
 
-// API Routes
+// Authentification (pas de vérification de token ici)
+router.post("/login", apiController.apiAuthenticate);
+
+// Middleware JWT global pour toutes les autres routes
 router.use(apiController.verifyToken);
 
-// Utilisateurs
-router.get("/users", apiController.getAllUsers);
-router.get("/users/:id", apiController.getUserById);
-router.post("/users", apiController.createUser);
-router.put("/users/:id", apiController.updateUser);
-router.delete("/users/:id", apiController.deleteUser);
+// =======================
+// 🔐 Utilisateurs
+// =======================
 
-// Cours
-router.get("/courses", apiController.getAllCourses);
-router.get("/courses/:id", apiController.getCourseById);
-router.post("/courses", apiController.createCourse);
-router.put("/courses/:id", apiController.updateCourse);
-router.delete("/courses/:id", apiController.deleteCourse);
+router.get("/users", apiController.getAllUsers, apiController.respondJSON);
+router.get("/users/:id", apiController.getUserById, apiController.respondJSON);
+router.post("/users", apiController.createUser, apiController.respondJSON);
+router.put("/users/:id", apiController.updateUser, apiController.respondJSON);
+router.delete("/users/:id", apiController.deleteUser, apiController.respondJSON);
 
-// Abonnés
-router.get("/subscribers", apiController.getAllSubscribers);
-router.get("/subscribers/:id", apiController.getSubscriberById);
-router.post("/subscribers", apiController.createSubscriber);
-router.put("/subscribers/:id", apiController.updateSubscriber);
-router.delete("/subscribers/:id", apiController.deleteSubscriber);
+// =======================
+// 📚 Cours
+// =======================
 
-// Génération de token pour l'API
-router.post("/login", apiController.apiAuthenticate);
+router.get("/courses", apiController.getAllCourses, apiController.respondJSON);
+router.get("/courses/:id", apiController.getCourseById, apiController.respondJSON);
+router.post("/courses", apiController.createCourse, apiController.respondJSON);
+router.put("/courses/:id", apiController.updateCourse, apiController.respondJSON);
+router.delete("/courses/:id", apiController.deleteCourse, apiController.respondJSON);
+
+// =======================
+// 🧑‍💼 Abonnés
+// =======================
+
+router.get("/subscribers", apiController.getAllSubscribers, apiController.respondJSON);
+router.get("/subscribers/:id", apiController.getSubscriberById, apiController.respondJSON);
+router.post("/subscribers", apiController.createSubscriber, apiController.respondJSON);
+router.put("/subscribers/:id", apiController.updateSubscriber, apiController.respondJSON);
+router.delete("/subscribers/:id", apiController.deleteSubscriber, apiController.respondJSON);
+
+// =======================
+// 🌐 Gestion d'erreur JSON
+// =======================
+
+router.use(apiController.errorJSON);
+
 module.exports = router;
