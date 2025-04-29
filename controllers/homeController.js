@@ -34,7 +34,7 @@ const courses = [
         const level = req.query.level;
         const price = req.query.price;
       
-        let filteredCourses = allCourses; // suppose que tu as une liste de cours
+        let filteredCourses = Courses; // suppose que tu as une liste de cours
       
         if (level) {
           filteredCourses = filteredCourses.filter(c => c.level === level);
