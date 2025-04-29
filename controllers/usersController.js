@@ -1,35 +1,43 @@
 const User = require("../models/user");
 // Fonction utilitaire pour extraire les paramètres utilisateur du corps de la requête
 const getUserParams = body => {
-return {
-name: {
-first: body.first,
-last: body.last
-},
-email: body.email,
-password: body.password,
-zipCode: body.zipCode
-};
+    return {
+    name: {
+    first: body.first,
+    last: body.last
+    },
+    email: body.email,
+    password: body.password,
+    zipCode: body.zipCode
+    };
 };
 module.exports = {
-index: (req, res, next) => {
+    index: (req, res, next) => {
 
-User.find({})
-.then(users => {
-res.locals.users = users;
-next();
+    User.find({})
+    .then(users => {
+    res.locals.users = users;
+    next();
 })
+
 .catch(error => {
 console.log(`Erreur lors de la récupération des utilisateurs: ${error.message}`);
 next(error);
 });
 },
+
 indexView: (req, res) => {
-res.render("users/index");
+res.render("users/index", {
+users: res.locals.users,
+pageTitle: "Liste des utilisateurs"
+});
 },
+
 new: (req, res) => {
-res.render("users/new");
+res.render("users/new", {
+pageTitle: "Créer un nouvel utilisateur",});
 },
+
 create: (req, res, next) => {
 let userParams = getUserParams(req.body);
 User.create(userParams)
@@ -38,6 +46,7 @@ res.locals.redirect = "/users";
 res.locals.user = user;
 next();
 })
+
 .catch(error => {
 console.log(`Erreur lors de la création de l'utilisateur: ${error.message}`);
 res.locals.redirect = "/users/new";
@@ -63,20 +72,21 @@ next(error);
 });
 },
 showView: (req, res) => {
-res.render("users/show");
+res.render("users/show", {
+user: res.locals.user,
+pageTitle: `Détails de l'utilisateur ${res.locals.user.name.first} ${res.locals.user.name.last}`
+});
 },
 edit: (req, res, next) => {
-let userId = req.params.id;
-User.findById(userId)
-.then(user => {
-res.render("users/edit", {
-user: user
-});
-})
-.catch(error => {
-console.log(`Erreur lors de la récupération de l'utilisateur par ID: ${error.message}`);
-next(error);
-});
+    let userId = req.params.id;
+    User.findById(userId)
+    .then(user => {
+    res.render("users/edit", { pageTitle: "Modifier l'utilisateur", user: user });
+    })
+    .catch(error => {
+    console.log(`Erreur lors de la récupération de l'utilisateur par ID: ${error.message}`);
+    next(error);
+    });
 },
 update: (req, res, next) => {
 let userId = req.params.id,
